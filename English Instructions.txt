@@ -2,7 +2,7 @@
 
 This tutorial will teach you how to split any song into **6 independent tracks** (Vocals, Drums, Bass, Guitar, Piano, and Other) directly inside REAPER, for free and locally.
 
-IF YOU ARE ON LINUX OR MAC, TRY THIS ONE: 'AI_Stem_Splitter_Universal (TRY THIS FOR MAC OR LINUX).lua'
+Both main scripts are now cross-platform (Windows, macOS, Linux). You do not need a separate universal file anymore.
 
 ## 1. Prerequisites (Only done once)
 
@@ -22,9 +22,11 @@ Before using the script, your computer needs to have the AI “engine” install
 ### **Install Demucs & Dependencies:**
 
 Open your system terminal (Windows: `cmd`, Mac: `Terminal`) and run this specific command to avoid common errors:
-`pip install demucs soundfile==0.12.1 "torchaudio<2.5.0"`
+`python -m pip install --upgrade pip`
+`python -m pip install demucs soundfile==0.12.1`
+`python -m pip install torchcodec`
 
-> **Note:** If you get an error about "TorchCodec", running the command above will fix it.
+> **Note:** If you get an error saying "TorchCodec is required", run: `python -m pip install torchcodec`
 
 ### **Configure REAPER:**
 

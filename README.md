@@ -22,16 +22,18 @@ Before using the script, ensure you have the following installed:
 * **Mac:** Install via Homebrew (`brew install ffmpeg`).
 
 
-3. **Libraries**: Open your terminal (CMD or PowerShell) and run this optimized command to avoid common errors:
-`pip install demucs soundfile==0.12.1 "torchaudio<2.5.0"`
+3. **Libraries**: Open your terminal (CMD or PowerShell) and run these commands:
+`python -m pip install --upgrade pip`
+`python -m pip install demucs soundfile==0.12.1`
+`python -m pip install torchcodec`
 
 📌 IMPORTANT NOTES (PLEASE READ):  
-**IF YOU ARE ON LINUX OR MAC, TRY THIS ONE: 'AI_Stem_Splitter_Universal (TRY THIS FOR MAC OR LINUX).lua'**
+**Both main scripts are now cross-platform (Windows, macOS, Linux). You do not need a separate universal file anymore.**
 
 * **GPU vs CPU:** You don't need an NVIDIA card to run this.
 * **NVIDIA Users:** The script will use CUDA and process songs in seconds.
 * **Everyone else:** The script will automatically use your CPU. It works perfectly and with the same high quality, but it will take longer (around 3-7 minutes per song). Just be patient while the AI does its magic!
-* **The "TorchCodec" & Backend Fix:** If you get a "RuntimeError" or "TorchCodec" error, ensure you installed the specific versions mentioned in the requirements above (soundfile and torchaudio).
+* **The "TorchCodec" & Backend Fix:** If you get a "TorchCodec is required" error, run `python -m pip install torchcodec`.
 * **First Run:** The very first time you use the script, it will download the AI models (about 2GB). This only happens once!
 
 ## 🚀 Installation
@@ -60,7 +62,8 @@ A: Follow these steps to ensure a perfect setup:
 3. **The "Secret" Step:** During installation, you MUST check the box that says "Add Python to PATH".
 4. **Run these commands in your terminal (CMD) one by one:**
 * `python -m pip install --upgrade pip`
-* `pip install demucs soundfile==0.12.1 "torchaudio<2.5.0"`
+* `python -m pip install demucs soundfile==0.12.1`
+* `python -m pip install torchcodec`
 
 
 
@@ -72,7 +75,7 @@ A: You don't have to worry about that. This script uses the system's TEMP folder
 
 ---
 
-## 🙌 Support this project / Apoya este proyecto
+## 🙌 Support this project
 
 Hi! If this script has helped improve your workflow or your productions, I would greatly appreciate your support to keep creating free tools for the community.
 
@@ -82,8 +85,9 @@ If you want to stay updated on more tools, music, and reactions, feel free to fo
 * 🎥 **YouTube:** [@olivertkachreactions]()
 * 📱 **TikTok:** [@olivertkachmusic]()
 
-If you feel this work has added value to your life and would like to kindly buy me a coffee (or a "tecito" 🍵) to support the development of future projects, you can do so here:
+If you feel this work has added value to your life and would like to kindly buy me a coffee to support the development of future projects, you can do so here:
 
-☕ **[Donate a Tecito (tecito.app/olivertkachmusic)]()**
+☕ **[Donate (tecito.app/olivertkachmusic)]()**
 
 Thank you so much for valuing my work, and I hope you enjoy your new stems! 🤘
+
