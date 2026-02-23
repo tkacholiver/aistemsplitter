@@ -1,74 +1,60 @@
-# 🤖 AI Stem Splitter by Oliver Tkach (Versión Unificada)
+# 🤖 AI Stem Splitter by Oliver Tkach
 
-Un ReaScript profesional para **REAPER** que utiliza Inteligencia Artificial (**Demucs**) para separar audio en 6 pistas de alta fidelidad directamente en tu proyecto.
+### **Versión 2.0 (Unificada)** Un ReaScript profesional para **REAPER** que utiliza Inteligencia Artificial para separar audio en 6 pistas de alta fidelidad.
 
-> **Nota:** Soy principalmente un **técnico de sonido**, no un desarrollador profesional. Esta herramienta nació de una necesidad personal y fue construida con ayuda de IA (Antigravity). ¡La comparto para que otros productores puedan aprovecharla!
-
-## ✨ Características
-
-* **6 Stems:** Separa audio en Voz, Batería, Bajo, Guitarra, Piano y Otros.
-* **Privacidad:** Procesa todo localmente; nada se sube a la nube, 100% privado.
-* **Multiplataforma:** Un solo script para Windows y Linux.
-* **Organización Automática:** Crea carpetas, nombra pistas y las alinea perfectamente.
-* **Respaldo Inteligente:** Incluye fallback automático a MP3 si la exportación WAV no está disponible.
+> **Nota:** Soy ante todo un **apasionado del audio**, no un desarrollador profesional. Esta herramienta nació de una necesidad en mi propio flujo de trabajo y fue construida con ayuda de IA. ¡La comparto para que otros productores puedan beneficiarse!
 
 ---
 
-## 🛠️ Requisitos
+## 🛠️ Requisitos Obligatorios
 
-1. **Python 3.10+:** Descárgalo de [python.org](https://www.python.org/).
-* **CRÍTICO:** Durante la instalación, marca la casilla **"Add Python to PATH"**.
+*Configuración única para Windows*
 
+1. **Python 3.10+ (El Motor)** * Descárgalo de [python.org](https://www.python.org/).
+* ⚠️ **CRÍTICO:** **DEBES** marcar la casilla **"Add Python to PATH"** durante la instalación.
+Si no te aparece en la instalación o no pudiste, probá con este video:
+🤔💻👨‍💻¿Cómo agregar Python al Path de Windows? - https://www.youtube.com/watch?v=B08TNPt7a-M
 
-2. **FFmpeg:** Esencial para la codificación de audio.
-* **Windows:** Instalar y añadir al PATH del sistema.
-
-
-
-3. **Librerías:** Ejecuta esto en tu terminal para evitar errores comunes:
-`python -m pip install demucs soundfile==0.12.1 torchcodec`
-
----
-
-## 🚀 Instalación y Uso
-
-1. **Descarga** el script que prefieras de este repositorio:
-* `AI Stem Splitter by Oliver Tkach - GUI.lua` (Recomendado: tiene barra de progreso).
-* `AI Stem Splitter by Oliver Tkach.lua` (Versión estándar).
+2. **FFmpeg (El Traductor de Audio)** * Abre el **Símbolo del Sistema (CMD)** como Administrador y ejecuta:
+`winget install Gyan.FFmpeg`
+* *Reinicia REAPER después de esto.*
 
 
-2. **En REAPER:** Abre la **Action List (?) > New Action > Load ReaScript...** y selecciona el archivo.
-3. **Ejecución:** Selecciona un ítem de audio, corre el script y espera a que la IA haga su magia.
-* *Primera vez:* El script descargará los modelos de IA (aprox. 2GB).
-
-
+3. **Visual C++ Redistributable** * Necesario para el procesamiento matemático: [Descargar aquí](https://www.google.com/search?q=https://aka.ms/vs/17/release/vc_redist.x64.exe).
+4. **Librerías Esenciales (Solución Manual)** * Si ves errores de "Dependencies Missing", ejecuta esto en el **CMD**:
+`pip install demucs soundfile==0.12.1 librosa numpy scipy torchcodec`
 
 ---
 
-## 🤝 Colaboración de la Comunidad
+## ✨ Novedades de la Versión 2.0
 
-Al no ser programador, la comunidad ha sido vital para profesionalizar este script:
-
-* **Líder del Proyecto:** Oliver Tkach (Lógica de audio/Workflow).
-* **Colaborador Principal:** Un enorme agradecimiento a **SifuInTheShell** por la refactorización profesional, unificar el soporte multiplataforma y mejorar los sistemas de registro de errores.
-
----
-
-## 🛠️ Solución de Problemas (FAQ)
-
-* **"Python no se reconoce":** Olvidaste marcar "Add Python to PATH" al instalar Python. Reinstálalo.
-* **"TorchCodec required":** Ejecuta `pip install torchcodec` en tu terminal.
-* **NVIDIA vs CPU:** Los usuarios de NVIDIA procesarán en segundos vía CUDA. Los demás usarán la CPU (tarda 3-7 min), pero la **calidad sigue siendo profesional**.
+| Función | Descripción |
+| --- | --- |
+| **Perfiles de Calidad** | Elige entre **Fast**, **Balanced** o **High** (Velocidad vs. Fidelidad). |
+| **Modo de 2 Pistas** | Extrae solo **Vocales** (Acapella) vs **Instrumental**. |
+| **Precisión de Salida** | Soporte profesional para **32-bit float** o **24-bit int**. |
+| **BPM y Color Auto** | Detecta el tempo, ajusta el grid de REAPER y colorea las pistas. |
+| **Control de Hardware** | Usa **CUDA (NVIDIA)** o **MPS (Apple)** para procesar en segundos. |
+| **Seguridad de Memoria** | **Segment Seconds** evita cierres en PCs con poca RAM. |
 
 ---
 
-## 🙌 Apoya el Proyecto
+## 🚀 Modo de Uso
 
-Si este script ha mejorado tu flujo de trabajo, ¡puedes apoyar su desarrollo!
+1. **Cargar:** En REAPER, ve a **Action List (?) > New Action > Load ReaScript...** y selecciona el archivo `.lua`.
+2. **Seleccionar:** Haz clic en un ítem de audio en tu proyecto.
+3. **Ejecutar:** Haz clic en **Run**, elige tu configuración en la interfaz y presiona **"Start Split"**.
+4. **Esperar:** La primera vez descargará aprox. 2GB de modelos de IA. **No cierres la ventana.**
+5. **Resultado:** Obtén 6 pistas organizadas, coloreadas y perfectamente alineadas.
 
-📸 **Instagram:** [@olivertkachmusic](https://www.instagram.com/olivertkachmusic)
-🎥 **YouTube:** [@olivertkachreactions](https://www.youtube.com/@olivertkachreactions)
+---
 
-Si quieres invitarme un "tecito" 🍵:
-☕ **[Donar / Tecito](https://tecito.app/olivertkachmusic)**
+## 🤝 Créditos y Soporte
 
+* **Líder del Proyecto:** Oliver Tkach (Lógica de audio y flujo de trabajo).
+* **Refactorización Técnica:** Un agradecimiento enorme a **SifuInTheShell** por la estabilidad de la v2.0 y la lógica multiplataforma.
+
+**¿Quieres apoyar el proyecto?**
+📸 [Instagram](https://www.instagram.com/olivertkachmusic) | 🎥 [YouTube](https://www.youtube.com/@olivertkachreactions)
+
+**Invítame un "tecito" 🍵:** ☕ **[Donar / Tecito](https://tecito.app/olivertkachmusic)**

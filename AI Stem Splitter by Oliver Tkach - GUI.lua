@@ -844,8 +844,8 @@ local function import_stems(song_name, pos, stems_dir, analysis, opts)
     local folder_tr = reaper.GetTrack(0, folder_index)
     
     local title = "STEMS: " .. song_name
-    if analysis then
-        title = title .. " [" .. analysis.bpm .. "bpm " .. analysis.key .. " @" .. analysis.hz .. "Hz]"
+    if analysis and analysis.bpm and analysis.key and analysis.hz then
+        title = title .. ", " .. analysis.bpm .. " BPM, " .. analysis.key .. ", " .. analysis.hz .. " Hz"
     end
     reaper.GetSetMediaTrackInfo_String(folder_tr, "P_NAME", title, true)
     set_track_color_rgb(folder_tr, STEM_TRACK_COLORS.folder, opts)
@@ -860,6 +860,9 @@ local function import_stems(song_name, pos, stems_dir, analysis, opts)
             reaper.InsertTrackAtIndex(idx, true)
             local tr = reaper.GetTrack(0, idx)
             local stem_title = string.upper(stem_name)
+            if analysis and analysis.bpm and analysis.key and analysis.hz then
+                stem_title = stem_title .. ", " .. analysis.bpm .. " BPM, " .. analysis.key .. ", " .. analysis.hz .. " Hz"
+            end
             
             reaper.GetSetMediaTrackInfo_String(tr, "P_NAME", stem_title, true)
             set_track_color_rgb(tr, STEM_TRACK_COLORS[stem_name] or STEM_TRACK_COLORS.other, opts)
@@ -871,7 +874,11 @@ local function import_stems(song_name, pos, stems_dir, analysis, opts)
                 if item then
                     local take = reaper.GetActiveTake(item)
                     if take then
-                         local take_name = song_name .. " - " .. stem_name
+                         local take_name = song_name
+                         if analysis and analysis.bpm and analysis.key and analysis.hz then
+                             take_name = take_name .. ", " .. analysis.bpm .. " BPM, " .. analysis.key .. ", " .. analysis.hz .. " Hz"
+                         end
+                         take_name = take_name .. " - " .. stem_name
                          reaper.GetSetMediaItemTakeInfo_String(take, "P_NAME", take_name, true)
                     end
                 end

@@ -620,7 +620,7 @@ local function import_stems(song_name, pos, stems_dir, analysis)
     
     local track_title = "STEMS: " .. song_name
     if analysis and analysis.bpm and analysis.key and analysis.hz then
-        track_title = track_title .. " [" .. analysis.bpm .. "bpm " .. analysis.key .. " @" .. analysis.hz .. "Hz]"
+        track_title = track_title .. ", " .. analysis.bpm .. " BPM, " .. analysis.key .. ", " .. analysis.hz .. " Hz"
     end
     
     reaper.GetSetMediaTrackInfo_String(folder_tr, "P_NAME", track_title, true)
@@ -638,7 +638,7 @@ local function import_stems(song_name, pos, stems_dir, analysis)
 
             local stem_title = string.upper(stem_name)
             if analysis and analysis.bpm and analysis.key and analysis.hz then
-                stem_title = stem_title .. " [" .. analysis.bpm .. "bpm " .. analysis.key .. " @" .. analysis.hz .. "Hz]"
+                stem_title = stem_title .. ", " .. analysis.bpm .. " BPM, " .. analysis.key .. ", " .. analysis.hz .. " Hz"
             end
 
             reaper.GetSetMediaTrackInfo_String(tr, "P_NAME", stem_title, true)
@@ -655,7 +655,7 @@ local function import_stems(song_name, pos, stems_dir, analysis)
                     if new_take then
                         local take_name = song_name
                         if analysis and analysis.bpm and analysis.key and analysis.hz then
-                             take_name = take_name .. " (" .. analysis.bpm .. "bpm " .. analysis.key .. " @" .. analysis.hz .. "Hz)"
+                             take_name = take_name .. ", " .. analysis.bpm .. " BPM, " .. analysis.key .. ", " .. analysis.hz .. " Hz"
                         end
                         take_name = take_name .. " - " .. stem_name
                         reaper.GetSetMediaItemTakeInfo_String(new_take, "P_NAME", take_name, true)
