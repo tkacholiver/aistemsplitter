@@ -1,3 +1,12 @@
+-- @description AI Stem Splitter by Oliver Tkach (GUI + Classic)
+-- @version 2.1.0
+-- @author Oliver Tkach
+-- @changelog
+--   ReaPack packaging with bundled Python worker.
+-- @provides
+--   [main] AI Stem Splitter by Oliver Tkach - GUI.lua
+--   [nomain] ai_stem_worker.py
+--   [nomain] requirements.txt
 --[[
     REAPER LOCAL AI ENGINEER (ANTIGRAVITY CORE)
     Role: Professional Audio Separation Engine (Universal V2.0 - Auto-Install)
@@ -39,6 +48,7 @@ local CLIP_MODE_OPTIONS = {"", "rescale", "clamp"}
 local DEVICE_OPTIONS = {"auto", "cpu", "cuda", "mps"}
 local SEGMENT_OPTIONS = {0, 8, 12, 20}
 local JOB_OPTIONS = {0, 2, 4, 8}
+local PYTHON_WORKER_FILE = "ai_stem_worker.py"
 local STEM_TRACK_COLORS = {
     folder = {180, 180, 180},
     vocals = {235, 92, 92},
@@ -97,6 +107,27 @@ local ctx = {
 local function path_join(base, leaf)
     return base .. SEP .. leaf
 end
+
+local function get_current_script_path()
+    local info = debug.getinfo(1, "S")
+    local source = info and info.source or ""
+    if source:sub(1, 1) == "@" then
+        source = source:sub(2)
+    end
+    return source
+end
+
+local function get_current_script_dir()
+    local path = get_current_script_path()
+    local dir = path:match("^(.*)[/\\][^/\\]+$")
+    if not dir or dir == "" then
+        return "."
+    end
+    return dir
+end
+
+local SCRIPT_DIR = get_current_script_dir()
+local PYTHON_WORKER_PATH = path_join(SCRIPT_DIR, PYTHON_WORKER_FILE)
 
 local function normalize_token(value)
     local s = tostring(value or ""):lower()
@@ -526,7 +557,6 @@ local function build_demucs_command_line(is_win, model, filename_tmpl, file_path
     if is_win then
         -- Windows: Double Quotes for paths
         return table.concat({
-            "-m demucs.separate",
             "-n " .. model,
             "--filename \"" .. filename_tmpl .. "\"",
             static_args,
@@ -537,7 +567,6 @@ local function build_demucs_command_line(is_win, model, filename_tmpl, file_path
     else
         -- POSIX: Single Quoting
         return table.concat({
-            "-m demucs.separate",
             "-n " .. model,
             "--filename " .. quote_arg_posix(filename_tmpl),
             static_args,
@@ -559,6 +588,7 @@ local function build_windows_runner_async(work_dir, song_name, file_path, log_pa
     local analysis_script = normalize_win_path(path_join(work_dir, "analyze_audio.py"))
     local analysis_output = normalize_win_path(path_join(work_dir, "analysis_info.txt"))
     local analysis_debug = normalize_win_path(path_join(work_dir, "analysis_debug.log"))
+    local worker_script = normalize_win_path(PYTHON_WORKER_PATH)
     
     -- 2. CREATE ANALYSIS SCRIPT
     local analysis_content = build_analysis_script(safe_file_path, analysis_output, safe_work_dir, analysis_debug)
@@ -604,6 +634,12 @@ local function build_windows_runner_async(work_dir, song_name, file_path, log_pa
         "",
         "echo [preflight] Selected Python: !PY_CMD!",
         "",
+        "if not exist \"" .. worker_script .. "\" (",
+        "  echo [error] Bundled worker script is missing: " .. worker_script,
+        "  set \"CODE=14\"",
+        "  goto :eof",
+        ")",
+        "",
         "echo [preflight] Verifying Demucs...",
         "\"!PY_CMD!\" -m demucs --help > nul",
         "if errorlevel 1 (",
@@ -644,7 +680,7 @@ local function build_windows_runner_async(work_dir, song_name, file_path, log_pa
         "",
         "echo [run] Running Demucs...",
         ":: STRICT QUOTING for Execution",
-        "\"!PY_CMD!\" " .. demucs_args,
+        "\"!PY_CMD!\" \"" .. worker_script .. "\" " .. demucs_args,
         "",
         "if errorlevel 1 (",
         "  set \"CODE=!ERRORLEVEL!\"",
@@ -663,6 +699,7 @@ local function build_linux_runner_async(work_dir, song_name, file_path, log_path
     local analysis_script = path_join(work_dir, "analyze_audio.py")
     local analysis_output = path_join(work_dir, "analysis_info.txt")
     local analysis_debug = path_join(work_dir, "analysis_debug.log")
+    local worker_script = PYTHON_WORKER_PATH
     
     local analysis_content = build_analysis_script(file_path, analysis_output, work_dir, analysis_debug)
     write_file(analysis_script, analysis_content)
@@ -701,6 +738,12 @@ local function build_linux_runner_async(work_dir, song_name, file_path, log_path
         "  fi",
         "  echo \"[preflight] Using Python: $PY_CMD\"",
         "",
+        "  if [ ! -f " .. quote_arg_posix(worker_script) .. " ]; then",
+        "    echo \"[error] Bundled worker script is missing: " .. worker_script .. "\"",
+        "    CODE=14",
+        "    return",
+        "  fi",
+        "",
         "  echo \"[preflight] Checking Demucs...\"",
         "  \"$PY_CMD\" -m demucs --help >/dev/null 2>&1",
         "  if [ $? -ne 0 ]; then",
@@ -735,7 +778,7 @@ local function build_linux_runner_async(work_dir, song_name, file_path, log_path
         "  \"$PY_CMD\" " .. quote_arg_posix(analysis_script),
         "",
         "  echo \"[run] Running Demucs...\"",
-        "  \"$PY_CMD\" " .. demucs_args,
+        "  \"$PY_CMD\" " .. quote_arg_posix(worker_script) .. " " .. demucs_args,
         "  if [ $? -ne 0 ]; then",
         "    CODE=$?",
         "    echo \"[error] Demucs failed.\"",

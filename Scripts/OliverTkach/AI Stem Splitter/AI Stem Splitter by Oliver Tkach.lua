@@ -1,3 +1,4 @@
+-- @noindex
 --[[
     REAPER LOCAL AI ENGINEER (ANTIGRAVITY CORE)
     Role: Professional Audio Separation Engine (High-Fidelity)
@@ -66,6 +67,7 @@ local DEMUCS_DEVICE = "auto"
 local DEMUCS_SEGMENT_SECONDS = 0
 -- Set >0 to control worker jobs.
 local DEMUCS_JOBS = 0
+local PYTHON_WORKER_FILE = "ai_stem_worker.py"
 
 local AUTO_COLOR_STEM_TRACKS = true
 local STEM_TRACK_COLORS = {
@@ -91,6 +93,27 @@ local IS_WINDOWS, SEP = get_os_info()
 local function path_join(base, leaf)
     return base .. SEP .. leaf
 end
+
+local function get_current_script_path()
+    local info = debug.getinfo(1, "S")
+    local source = info and info.source or ""
+    if source:sub(1, 1) == "@" then
+        source = source:sub(2)
+    end
+    return source
+end
+
+local function get_current_script_dir()
+    local path = get_current_script_path()
+    local dir = path:match("^(.*)[/\\][^/\\]+$")
+    if not dir or dir == "" then
+        return "."
+    end
+    return dir
+end
+
+local SCRIPT_DIR = get_current_script_dir()
+local PYTHON_WORKER_PATH = path_join(SCRIPT_DIR, PYTHON_WORKER_FILE)
 
 local function normalize_token(value)
     local s = tostring(value or ""):lower()
@@ -509,7 +532,6 @@ local function build_demucs_command_for_runner(file_path, work_dir, demucs_stati
 
     if IS_WINDOWS then
         return table.concat({
-            "!PY_CMD! -m demucs.separate",
             " -n ", MODEL_NAME,
             " --filename ", quote_arg(filename_template),
             static_args,
@@ -520,7 +542,6 @@ local function build_demucs_command_for_runner(file_path, work_dir, demucs_stati
     end
 
     return table.concat({
-        "$PY_CMD -m demucs.separate",
         " -n ", MODEL_NAME,
         " --filename ", quote_arg(filename_template),
         static_args,
@@ -679,6 +700,7 @@ local function build_windows_runner(work_dir, song_name, file_path, log_path, de
     local probe_path = path_join(work_dir, "torchaudio_write_probe.wav")
     local analysis_script_path = path_join(work_dir, "analyze_audio.py")
     local analysis_output_path = path_join(work_dir, "analysis_info.txt")
+    local worker_script = normalize_win_path(PYTHON_WORKER_PATH)
     
     local analysis_script_content = build_analysis_script(file_path, analysis_output_path, work_dir)
     write_file(analysis_script_path, analysis_script_content)
@@ -705,6 +727,11 @@ local function build_windows_runner(work_dir, song_name, file_path, log_path, de
         "  goto :eof",
         ")",
         "echo [preflight] Using !PY_CMD!",
+        "if not exist \"" .. worker_script .. "\" (",
+        "  echo [error] Bundled worker script is missing: " .. worker_script,
+        "  set \"CODE=14\"",
+        "  goto :eof",
+        ")",
         "echo [preflight] Checking Python dependencies...",
         "!PY_CMD! -c \"import demucs, torch, torchaudio, soundfile\" > nul 2>&1",
         "if errorlevel 1 (",
@@ -739,7 +766,7 @@ local function build_windows_runner(work_dir, song_name, file_path, log_path, de
         "echo [analysis] Analyzing audio (BPM/Key/Hz)...",
         "!PY_CMD! " .. quote_arg(analysis_script_path),
         "echo [run] Starting Demucs...",
-        demucs_cmd,
+        "!PY_CMD! \"" .. worker_script .. "\"" .. demucs_cmd,
         "if errorlevel 1 (",
         "  set \"CODE=!ERRORLEVEL!\"",
         "  echo [error] Demucs failed with exit code !CODE!.",
@@ -757,6 +784,7 @@ local function build_posix_runner(work_dir, song_name, file_path, log_path, demu
     local probe_path = path_join(work_dir, "torchaudio_write_probe.wav")
     local old_named = path_join(path_join(work_dir, MODEL_NAME), song_name)
     local old_template = path_join(path_join(work_dir, MODEL_NAME), STEM_OUTPUT_FOLDER)
+    local worker_script = PYTHON_WORKER_PATH
 
     local analysis_script_path = path_join(work_dir, "analyze_audio.py")
     local analysis_output_path = path_join(work_dir, "analysis_info.txt")
@@ -780,6 +808,11 @@ local function build_posix_runner(work_dir, song_name, file_path, log_path, demu
         "    return",
         "  fi",
         "  echo \"[preflight] Using $PY_CMD\"",
+        "  if [ ! -f " .. quote_arg(worker_script) .. " ]; then",
+        "    echo \"[error] Bundled worker script is missing: " .. worker_script .. "\"",
+        "    CODE=14",
+        "    return",
+        "  fi",
         "  echo \"[preflight] Checking Python dependencies...\"",
         "  \"$PY_CMD\" -c \"import demucs, torch, torchaudio, soundfile\" >/dev/null 2>&1",
         "  if [ $? -ne 0 ]; then",
@@ -813,7 +846,7 @@ local function build_posix_runner(work_dir, song_name, file_path, log_path, demu
         "  echo \"[analysis] Analyzing audio (BPM/Key/Hz)...\"",
         "  \"$PY_CMD\" " .. quote_arg(analysis_script_path),
         "  echo \"[run] Starting Demucs...\"",
-        "  " .. demucs_cmd,
+        "  \"$PY_CMD\" " .. quote_arg(worker_script) .. demucs_cmd,
         "  if [ $? -ne 0 ]; then",
         "    CODE=$?",
         "    echo \"[error] Demucs failed with exit code $CODE.\"",
