@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 # @noindex
 """Bundled worker used by the REAPER Lua scripts.
 
