@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="230715e8fc2acb509c08243e4db99a120bc13b76">
+<index version="1" name="AI Stem Splitter by Oliver Tkach" commit="230715e8fc2acb509c08243e4db99a120bc13b76">
   <category name="Scripts/OliverTkach/AI Stem Splitter">
     <reapack name="AI Stem Splitter by Oliver Tkach - GUI.lua" type="script" desc="AI Stem Splitter by Oliver Tkach (GUI + Classic)">
       <version name="2.1.0" author="Oliver Tkach" time="2026-02-24T10:52:23Z">
