@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<index version="1" commit="230715e8fc2acb509c08243e4db99a120bc13b76">
+  <category name="Scripts/OliverTkach/AI Stem Splitter">
+    <reapack name="AI Stem Splitter by Oliver Tkach - GUI.lua" type="script" desc="AI Stem Splitter by Oliver Tkach (GUI + Classic)">
+      <version name="2.1.0" author="Oliver Tkach" time="2026-02-24T10:52:23Z">
+        <changelog><![CDATA[ReaPack packaging with bundled Python worker.]]></changelog>
+        <source main="main">https://github.com/tkacholiver/aistemsplitter/raw/230715e8fc2acb509c08243e4db99a120bc13b76/Scripts/OliverTkach/AI%20Stem%20Splitter/AI%20Stem%20Splitter%20by%20Oliver%20Tkach%20-%20GUI.lua</source>
+        <source file="ai_stem_worker.py">https://github.com/tkacholiver/aistemsplitter/raw/230715e8fc2acb509c08243e4db99a120bc13b76/Scripts/OliverTkach/AI%20Stem%20Splitter/ai_stem_worker.py</source>
+        <source file="requirements.txt">https://github.com/tkacholiver/aistemsplitter/raw/230715e8fc2acb509c08243e4db99a120bc13b76/Scripts/OliverTkach/AI%20Stem%20Splitter/requirements.txt</source>
+      </version>
+    </reapack>
+  </category>
+  <metadata>
+    <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 \u55358 ?\u56598 ? AI Stem Splitter by Oliver Tkach - Version 2.0\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 A professional ReaScript for {\b REAPER} that utilizes Artificial Intelligence ({\b Demucs}) to separate audio into high-fidelity tracks directly within your project.\par}
+{\pard \ql \f0 \sa180 \li720 \fi0 {\b Note:} I'm primarily an {\b audio guy}, not a professional developer. This tool was born out of a personal workflow need and built using AI assistance (Antigravity). I'm sharing it so other producers can benefit from it!\par}
+{\pard \qc \f0 \sa180 \li0 \fi0 \emdash\emdash\emdash\emdash\emdash\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 \u10024 ? Features (New in v2.0!)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b 6 Stems:} Separate audio into Vocals, Drums, Bass, Guitar, Piano, and Other.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Quality Profiles:} Choose between {\b Fast} (speed), {\b Balanced} (default), or {\b High} (best quality) to trade render time for fidelity.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Two-stem Mode:} Perfect for karaoke or acapellas. Create just two outputs: your {\b Target} (e.g., Vocals) and {\b No_Target} (everything else).\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Smart BPM Sync:} Automatically detects the audio's tempo and writes it to the REAPER project grid.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Automatic Organization:} Automatically creates folders, names tracks, and applies consistent colors for a clean session.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Technical Precision:} Choose your output format ({\b 32-bit float} or {\b 24-bit int}) and use {\b Clip Modes} (Rescale/Clamp) to prevent distortion.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b 100% Private:} Everything processes locally on your machine; no cloud uploads required.\sa180\par}
+{\pard \qc \f0 \sa180 \li0 \fi0 \emdash\emdash\emdash\emdash\emdash\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 \u55357 ?\u57056 ?\u65039 ? System Requirements\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab {\b Python 3.10+:} Download from {\field{\*\fldinst{HYPERLINK "https://www.python.org/"}}{\fldrslt{\ul
+python.org
+}}}
+.\sa180\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b CRITICAL:} During installation, check the box {\b "Add Python to PATH"}.\sa180\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab {\b FFmpeg:} Essential for audio encoding.\sa180\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Windows:} {\f1 winget install Gyan.FFmpeg}\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b macOS:} {\f1 brew install ffmpeg} (Script now includes explicit macOS support paths).\sa180\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab {\b Libraries:} Run this in your terminal to install necessary dependencies: {\f1 pip install demucs soundfile==0.12.1 librosa numpy scipy torchcodec}\sa180\par}
+{\pard \qc \f0 \sa180 \li0 \fi0 \emdash\emdash\emdash\emdash\emdash\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 \u55357 ?\u56960 ? Installation & Usage\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab {\b Download} your preferred script:\sa180\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\f1 AI Stem Splitter by Oliver Tkach - GUI.lua} ({\b Recommended:} Features a progress bar and configuration window).\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\f1 AI Stem Splitter by Oliver Tkach.lua} (Standard non-GUI version).\sa180\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab {\b In REAPER:} Open {\b Action List (?) > New Action > Load ReaScript...} and select the file.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab {\b Run:} Select an audio item, run the script, and configure your settings.\sa180\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\i First run:} The script will download the AI models (approx. 2GB).\sa180\par}
+{\pard \qc \f0 \sa180 \li0 \fi0 \emdash\emdash\emdash\emdash\emdash\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 \u9881 ?\u65039 ? Power User Options (v2.0)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Device:} Auto-detects {\b NVIDIA (CUDA)} or {\b Apple Silicon (MPS)} for lightning-fast processing. You can force {\b CPU} if your GPU is unstable.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Segment Seconds:} If you encounter memory crashes (low RAM/VRAM), set this to 10 or 20 to process the audio in smaller chunks.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Jobs:} Increase the number of worker jobs to speed up processing on high-end CPUs.\sa180\par}
+{\pard \qc \f0 \sa180 \li0 \fi0 \emdash\emdash\emdash\emdash\emdash\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 \u55358 ?\u56605 ? Community Collaboration\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Since I'm not a coder, the community has been vital in making this script robust:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Project Lead:} Oliver Tkach (Audio/Workflow logic).\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Major Contributor:} A huge thanks to {\b SifuInTheShell} for the professional v2.0 refactoring, unifying cross-platform support (Win/Mac/Linux), and implementing the smart fallback and logging systems.\sa180\par}
+{\pard \qc \f0 \sa180 \li0 \fi0 \emdash\emdash\emdash\emdash\emdash\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 \u55357 ?\u57056 ?\u65039 ? Troubleshooting (FAQ)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b "Python not recognized":} You likely forgot to check "Add Python to PATH" during installation. Reinstall Python.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b Memory Crashes:} Lower your {\b Segment Seconds} to 8 or 12.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\b NVIDIA vs CPU:} CUDA users will process in seconds. Everyone else will use CPU (3-7 minutes), but the {\b quality remains professional grade}.\sa180\par}
+{\pard \qc \f0 \sa180 \li0 \fi0 \emdash\emdash\emdash\emdash\emdash\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 \u55357 ?\u56908 ? Support the Project\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 If this script has improved your workflow, feel free to support its development!\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \u55357 ?\u56568 ? {\b Instagram:} {\field{\*\fldinst{HYPERLINK "https://www.instagram.com/olivertkachmusic"}}{\fldrslt{\ul
+@olivertkachmusic
+}}}
+ \u55356 ?\u57253 ? {\b YouTube:} {\field{\*\fldinst{HYPERLINK "https://www.youtube.com/@olivertkachreactions"}}{\fldrslt{\ul
+@olivertkachreactions
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 If you'd like to buy me a coffee (or a "tecito" \u55356 ?\u57205 ?): \u9749 ? {\b {\field{\*\fldinst{HYPERLINK "https://tecito.app/olivertkachmusic"}}{\fldrslt{\ul
+Donate / Tecito
+}}}
+}\par}
+}
+]]></description>
+  </metadata>
+</index>
